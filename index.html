@@ -276,6 +276,113 @@ mark { background: var(--highlight); color: var(--orange); padding: 1px 3px; bor
 }
 .back-top:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
 .back-top.visible { display: flex; }
+
+/* ADD ROW BUTTON */
+.add-row-btn {
+  padding: 6px 16px; font-size: 13px; font-weight: 700;
+  background: var(--green); color: #fff; border: none;
+  border-radius: var(--radius); cursor: pointer; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px; margin-left: 12px;
+}
+.add-row-btn:hover { background: #15692e; box-shadow: var(--shadow); }
+
+/* ADD ROW MODAL */
+.add-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
+  z-index: 9998; padding: 20px; overflow-y: auto;
+}
+.add-modal-overlay.visible { display: flex; }
+.add-modal {
+  background: #fff; border-radius: 14px; width: 100%; max-width: 640px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25); position: relative;
+  max-height: 90vh; display: flex; flex-direction: column;
+}
+.add-modal-header {
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.add-modal-title { font-size: 18px; font-weight: 700; color: var(--text); }
+.add-modal-close {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: var(--bg-secondary); color: var(--text-secondary);
+  font-size: 18px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: all 0.15s;
+}
+.add-modal-close:hover { background: var(--red); color: #fff; }
+.add-modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+.add-modal-field { margin-bottom: 16px; }
+.add-modal-field label {
+  display: block; font-size: 13px; font-weight: 700;
+  color: var(--text-secondary); margin-bottom: 5px;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.add-modal-field input[type="text"],
+.add-modal-field textarea {
+  width: 100%; padding: 10px 14px; border: 2px solid var(--border);
+  border-radius: 8px; font-size: 15px; font-family: inherit;
+  color: var(--text); outline: none; transition: border-color 0.2s;
+  background: #fff; line-height: 1.6;
+}
+.add-modal-field input[type="text"]:focus,
+.add-modal-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.add-modal-field textarea { resize: vertical; min-height: 70px; }
+
+/* IMAGE UPLOAD */
+.img-upload-area {
+  border: 2px dashed var(--border); border-radius: 10px;
+  padding: 20px; text-align: center; cursor: pointer;
+  transition: all 0.2s; position: relative; background: var(--bg-secondary);
+}
+.img-upload-area:hover { border-color: var(--accent); background: var(--accent-light); }
+.img-upload-area.has-image { padding: 10px; border-style: solid; border-color: var(--green); background: var(--green-bg); }
+.img-upload-area input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer;
+}
+.img-upload-icon { font-size: 32px; margin-bottom: 6px; }
+.img-upload-text { font-size: 13px; color: var(--text-muted); }
+.img-upload-preview {
+  max-width: 120px; max-height: 150px; border-radius: 8px;
+  border: 1px solid var(--border); object-fit: contain;
+}
+.img-upload-remove {
+  position: absolute; top: 6px; right: 6px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--red); color: #fff; border: none;
+  font-size: 14px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+}
+
+/* MODAL FOOTER */
+.add-modal-footer {
+  padding: 16px 24px; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+.add-modal-footer button {
+  padding: 10px 24px; font-size: 14px; font-weight: 700;
+  border: none; border-radius: 8px; cursor: pointer; transition: all 0.15s;
+}
+.btn-cancel { background: var(--bg-secondary); color: var(--text-secondary); }
+.btn-cancel:hover { background: var(--border); }
+.btn-save { background: var(--green); color: #fff; }
+.btn-save:hover { background: #15692e; }
+
+/* USER-ADDED ROW INDICATOR */
+tr.user-added td:first-child::before {
+  content: '✨'; margin-right: 4px; font-size: 12px;
+}
+.user-row-badge {
+  display: inline-block; font-size: 10px; padding: 1px 6px;
+  background: #e8f5e9; color: var(--green); border-radius: 8px;
+  font-weight: 700; margin-left: 6px; vertical-align: middle;
+}
+.user-row-delete {
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 4px;
+  transition: all 0.15s; margin-left: 4px;
+}
+.user-row-delete:hover { background: #ffeef0; color: var(--red); }
+.char-card.user-added { border-left: 3px solid var(--green); }
 </style>
 </head>
 <body>
@@ -306,6 +413,19 @@ mark { background: var(--highlight); color: var(--orange); padding: 1px 3px; bor
 <div class="copy-toast" id="copyToast"></div>
 <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
 <div class="img-modal" id="imgModal" onclick="this.classList.remove('visible')"><img id="imgModalImg"></div>
+<div class="add-modal-overlay" id="addModal">
+  <div class="add-modal">
+    <div class="add-modal-header">
+      <div class="add-modal-title" id="addModalTitle">새 행 추가</div>
+      <button class="add-modal-close" onclick="closeAddModal()">&times;</button>
+    </div>
+    <div class="add-modal-body" id="addModalBody"></div>
+    <div class="add-modal-footer">
+      <button class="btn-cancel" onclick="closeAddModal()">취소</button>
+      <button class="btn-save" onclick="saveNewRow()">✅ 저장</button>
+    </div>
+  </div>
+</div>
 
 <script src="data.js"></script>
 <script src="img_mapping.js"></script>
@@ -411,6 +531,168 @@ function applyEdits() {
 }
 applyEdits();
 
+// === USER-ADDED ROWS ===
+let addedRows = {};
+try { addedRows = JSON.parse(localStorage.getItem('pmu_added') || '{}'); } catch(e) {}
+let addedImages = {};
+try { addedImages = JSON.parse(localStorage.getItem('pmu_added_imgs') || '{}'); } catch(e) {}
+
+let addModalSheet = '';
+let addModalImgData = null;
+
+function openAddModal(sheetKey) {
+  addModalSheet = sheetKey;
+  addModalImgData = null;
+  const cfg = SHEET_CONFIG[sheetKey];
+  const modal = document.getElementById('addModal');
+  const title = document.getElementById('addModalTitle');
+  const body = document.getElementById('addModalBody');
+  title.innerHTML = `${cfg.icon} ${cfg.label} — 새 행 추가`;
+
+  let html = '';
+  if (cfg.headers && cfg.colMap) {
+    for (let i = 0; i < cfg.headers.length; i++) {
+      const hdr = cfg.headers[i];
+      const ci = cfg.colMap[i];
+      if (ci === -1 && sheetKey === '1. charapter') {
+        // Image upload field
+        html += `<div class="add-modal-field">
+          <label>${hdr}</label>
+          <div class="img-upload-area" id="imgUploadArea" onclick="document.getElementById('imgFileInput').click()">
+            <input type="file" id="imgFileInput" accept="image/*" onchange="handleImgUpload(event)">
+            <div id="imgUploadContent"><div class="img-upload-icon">📷</div><div class="img-upload-text">클릭하여 이미지 선택<br>(PNG, JPG 등)</div></div>
+          </div>
+        </div>`;
+      } else {
+        const isLong = ['설정/특징', '설명', '줄거리', '말투', '호칭(타인)', '비고', '설정 및 특징'].includes(hdr);
+        if (isLong) {
+          html += `<div class="add-modal-field"><label>${hdr}</label><textarea data-col-idx="${i}" placeholder="${hdr} 입력"></textarea></div>`;
+        } else {
+          html += `<div class="add-modal-field"><label>${hdr}</label><input type="text" data-col-idx="${i}" placeholder="${hdr} 입력"></div>`;
+        }
+      }
+    }
+  } else {
+    // Generic: show 6 text fields
+    const maxC = 6;
+    for (let i = 0; i < maxC; i++) {
+      html += `<div class="add-modal-field"><label>Col ${i+1}</label><input type="text" data-col-idx="${i}" placeholder="Col ${i+1} 입력"></div>`;
+    }
+    html += `<div class="add-modal-field">
+      <label>이미지 (선택)</label>
+      <div class="img-upload-area" id="imgUploadArea" onclick="document.getElementById('imgFileInput').click()">
+        <input type="file" id="imgFileInput" accept="image/*" onchange="handleImgUpload(event)">
+        <div id="imgUploadContent"><div class="img-upload-icon">📷</div><div class="img-upload-text">클릭하여 이미지 선택 (선택사항)</div></div>
+      </div>
+    </div>`;
+  }
+  body.innerHTML = html;
+  modal.classList.add('visible');
+  // Auto focus first input
+  setTimeout(() => { const first = body.querySelector('input[type="text"], textarea'); if (first) first.focus(); }, 100);
+}
+
+function closeAddModal() {
+  document.getElementById('addModal').classList.remove('visible');
+  addModalImgData = null;
+}
+
+function handleImgUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    addModalImgData = ev.target.result;
+    const area = document.getElementById('imgUploadArea');
+    area.classList.add('has-image');
+    document.getElementById('imgUploadContent').innerHTML =
+      `<img class="img-upload-preview" src="${addModalImgData}">
+       <button class="img-upload-remove" onclick="event.stopPropagation(); removeUploadImg()">&times;</button>
+       <div class="img-upload-text" style="margin-top:6px">이미지 선택됨 ✓</div>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeUploadImg() {
+  addModalImgData = null;
+  const area = document.getElementById('imgUploadArea');
+  area.classList.remove('has-image');
+  document.getElementById('imgUploadContent').innerHTML =
+    `<div class="img-upload-icon">📷</div><div class="img-upload-text">클릭하여 이미지 선택</div>`;
+  document.getElementById('imgFileInput').value = '';
+}
+
+function saveNewRow() {
+  const body = document.getElementById('addModalBody');
+  const cfg = SHEET_CONFIG[addModalSheet];
+  let rowData;
+  if (cfg.colMap) {
+    const maxOrigCol = Math.max(...cfg.colMap.filter(c => c >= 0)) + 1;
+    rowData = new Array(Math.max(maxOrigCol, 12)).fill('');
+    const inputs = body.querySelectorAll('[data-col-idx]');
+    inputs.forEach(inp => {
+      const i = parseInt(inp.dataset.colIdx);
+      const ci = cfg.colMap[i];
+      if (ci >= 0) rowData[ci] = inp.value.trim();
+    });
+  } else {
+    rowData = [];
+    const inputs = body.querySelectorAll('[data-col-idx]');
+    inputs.forEach(inp => { rowData.push(inp.value.trim()); });
+  }
+
+  // Check at least one field has content
+  if (rowData.every(v => !v) && !addModalImgData) {
+    showToast('⚠️ 최소 하나의 필드를 입력해주세요');
+    return;
+  }
+
+  // Save row
+  if (!addedRows[addModalSheet]) addedRows[addModalSheet] = [];
+  const rowId = Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  addedRows[addModalSheet].push({ id: rowId, data: rowData });
+  localStorage.setItem('pmu_added', JSON.stringify(addedRows));
+
+  // Save image
+  if (addModalImgData) {
+    if (!addedImages[addModalSheet]) addedImages[addModalSheet] = {};
+    addedImages[addModalSheet][rowId] = addModalImgData;
+    localStorage.setItem('pmu_added_imgs', JSON.stringify(addedImages));
+  }
+
+  closeAddModal();
+  renderContent();
+  updateTabCounts();
+  showToast('✅ 새 행이 추가되었습니다');
+}
+
+function deleteAddedRow(sheetKey, rowId) {
+  if (!confirm('이 행을 삭제하시겠습니까?')) return;
+  if (addedRows[sheetKey]) {
+    addedRows[sheetKey] = addedRows[sheetKey].filter(r => r.id !== rowId);
+    if (addedRows[sheetKey].length === 0) delete addedRows[sheetKey];
+    localStorage.setItem('pmu_added', JSON.stringify(addedRows));
+  }
+  if (addedImages[sheetKey]?.[rowId]) {
+    delete addedImages[sheetKey][rowId];
+    localStorage.setItem('pmu_added_imgs', JSON.stringify(addedImages));
+  }
+  renderContent();
+  updateTabCounts();
+  showToast('🗑️ 행이 삭제되었습니다');
+}
+
+function getAddedRowImg(sheetKey, rowId) {
+  return addedImages[sheetKey]?.[rowId] || null;
+}
+// Close modal on outside click or Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAddModal();
+});
+document.getElementById('addModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('addModal')) closeAddModal();
+});
+
 function init() {
   buildTabs();
   renderContent();
@@ -464,7 +746,14 @@ function updateTabCounts() {
 function getDataRows(key) {
   const data = RAW_DATA[key]; const cfg = SHEET_CONFIG[key];
   if (!data || !cfg) return [];
-  return data.slice(cfg.dataStart || 0).filter(r => r.some(c => c.trim()));
+  const orig = data.slice(cfg.dataStart || 0).filter(r => r.some(c => c.trim()));
+  // Include user-added rows in count
+  const userCount = (addedRows[key] || []).length;
+  if (userCount > 0) {
+    const extra = (addedRows[key] || []).map(ur => ur.data);
+    return [...orig, ...extra];
+  }
+  return orig;
 }
 
 function switchTab(tab) {
@@ -481,7 +770,12 @@ function renderContent() {
     let html = '';
     for (const [key, cfg] of Object.entries(SHEET_CONFIG)) {
       const r = renderSheet(key, cfg, true);
-      if (r.mc > 0 || !currentSearch) html += r.html;
+      // When searching, only show sheets with matches
+      if (currentSearch) {
+        if (r.mc > 0) html += r.html;
+      } else {
+        html += r.html;
+      }
       total += r.mc;
     }
     container.innerHTML = (currentSearch && total === 0) ? renderEmpty() : html;
@@ -518,21 +812,27 @@ function getCharImg(rowIdx) {
 function renderTable(key, cfg, data, isGlobal) {
   const colMap = cfg.colMap;
   let rows = data.slice(cfg.dataStart || 0).filter(r => r.some(c => c.trim()));
+  // Merge user-added rows
+  const userRows = addedRows[key] || [];
   let filtered = filterRows(rows);
-  const mc = currentSearch ? filtered.length : rows.length;
+  let filteredUser = currentSearch ? userRows.filter(ur => { const t = ur.data.join(' ').toLowerCase(); const terms = currentSearch.toLowerCase().split(/\s+/); return terms.every(term => t.includes(term)); }) : userRows;
+  const mc = currentSearch ? filtered.length + filteredUser.length : rows.length + userRows.length;
   if (currentSearch && mc === 0 && isGlobal) return { html: '', mc: 0 };
   const display = currentSearch ? filtered : rows;
+  const displayUser = currentSearch ? filteredUser : userRows;
+  const totalCount = display.length + displayUser.length;
 
-  let html = `<div class="sheet-section"><div class="sheet-title">${cfg.icon} ${cfg.label} <span class="badge">${display.length}건</span>${key === '1. charapter' ? viewToggle() : ''}</div><div class="table-wrapper"><table>`;
+  let html = `<div class="sheet-section"><div class="sheet-title">${cfg.icon} ${cfg.label} <span class="badge">${totalCount}건</span>${key === '1. charapter' ? viewToggle() : ''}<button class="add-row-btn" onclick="openAddModal('${key}')">➕ 행 추가</button></div><div class="table-wrapper"><table>`;
 
   if (cfg.headers && colMap) {
-    html += '<thead><tr>' + cfg.headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead>';
+    html += '<thead><tr>' + cfg.headers.map(h => `<th>${h}</th>`).join('') + '<th></th></tr></thead>';
   } else {
     const maxC = Math.min(data.reduce((m, r) => Math.max(m, r.filter(c => c.trim()).length), 0), 12);
-    html += '<thead><tr>' + Array.from({length: maxC}, (_, i) => `<th>Col ${i+1}</th>`).join('') + '</tr></thead>';
+    html += '<thead><tr>' + Array.from({length: maxC}, (_, i) => `<th>Col ${i+1}</th>`).join('') + '<th></th></tr></thead>';
   }
 
   html += '<tbody>';
+  // Original rows
   for (const row of display) {
     const rowIdx = data.indexOf(row);
     html += '<tr>';
@@ -541,7 +841,6 @@ function renderTable(key, cfg, data, isGlobal) {
         const ci = colMap[i];
         const cls = cfg.cellClasses?.[i] || '';
         if (ci === -1 && key === '1. charapter') {
-          // Image column
           const imgFile = getCharImg(rowIdx);
           html += `<td class="cell-img">${imgFile ? `<img src="images/${imgFile}" onclick="showImg(this.src)" loading="lazy" alt="캐릭터">` : '<span style="color:var(--text-muted)">-</span>'}</td>`;
         } else if (ci === -1) {
@@ -552,7 +851,6 @@ function renderTable(key, cfg, data, isGlobal) {
         }
       }
     } else {
-      // Auto columns - include images if sheet has them
       const maxC = Math.min(row.filter(c => c.trim()).length + 1, 12);
       const sheetImgs = IMG_BY_ROW[key]?._all || {};
       for (let i = 0; i < maxC; i++) {
@@ -565,7 +863,36 @@ function renderTable(key, cfg, data, isGlobal) {
         }
       }
     }
-    html += '</tr>';
+    html += '<td></td></tr>';
+  }
+  // User-added rows
+  for (const ur of displayUser) {
+    html += '<tr class="user-added">';
+    if (colMap) {
+      for (let i = 0; i < colMap.length; i++) {
+        const ci = colMap[i];
+        const cls = cfg.cellClasses?.[i] || '';
+        if (ci === -1 && key === '1. charapter') {
+          const imgData = getAddedRowImg(key, ur.id);
+          html += `<td class="cell-img">${imgData ? `<img src="${imgData}" onclick="showImg(this.src)" loading="lazy">` : '<span style="color:var(--text-muted)">-</span>'}</td>`;
+        } else if (ci === -1) {
+          html += '<td>-</td>';
+        } else {
+          const val = ci < ur.data.length ? ur.data[ci] : '';
+          html += `<td class="${cls}"><div class="cell-content" onclick="copyText(this)">${hl(esc(val || ''))}</div></td>`;
+        }
+      }
+    } else {
+      for (let i = 0; i < Math.max(ur.data.length, 1); i++) {
+        const imgData = getAddedRowImg(key, ur.id);
+        if (i === 0 && imgData) {
+          html += `<td class="cell-img"><img src="${imgData}" onclick="showImg(this.src)" loading="lazy">${ur.data[i]?.trim() ? '<br>' + esc(ur.data[i]) : ''}</td>`;
+        } else {
+          html += `<td><div class="cell-content" onclick="copyText(this)">${hl(esc(ur.data[i] || ''))}</div></td>`;
+        }
+      }
+    }
+    html += `<td><span class="user-row-badge">NEW</span><button class="user-row-delete" onclick="deleteAddedRow('${key}','${ur.id}')" title="삭제">🗑</button></td></tr>`;
   }
   html += '</tbody></table></div></div>';
   return { html, mc };
@@ -574,12 +901,16 @@ function renderTable(key, cfg, data, isGlobal) {
 function renderCards(key, cfg, data, isGlobal) {
   let rows = data.slice(cfg.dataStart || 0).filter(r => r.some(c => c.trim()));
   rows = rows.filter(r => (r[2]?.trim()) || (r[3]?.trim()));
+  const userRows = addedRows[key] || [];
   let filtered = filterRows(rows);
-  const mc = currentSearch ? filtered.length : rows.length;
+  let filteredUser = currentSearch ? userRows.filter(ur => { const t = ur.data.join(' ').toLowerCase(); const terms = currentSearch.toLowerCase().split(/\s+/); return terms.every(term => t.includes(term)); }) : userRows;
+  const mc = currentSearch ? filtered.length + filteredUser.length : rows.length + userRows.length;
   if (currentSearch && mc === 0 && isGlobal) return { html: '', mc: 0 };
   const display = currentSearch ? filtered : rows;
+  const displayUser = currentSearch ? filteredUser : userRows;
+  const totalCount = display.length + displayUser.length;
 
-  let html = `<div class="sheet-section"><div class="sheet-title">${cfg.icon} ${cfg.label} <span class="badge">${display.length}건</span>${viewToggle()}</div><div class="char-grid">`;
+  let html = `<div class="sheet-section"><div class="sheet-title">${cfg.icon} ${cfg.label} <span class="badge">${totalCount}건</span>${viewToggle()}<button class="add-row-btn" onclick="openAddModal('${key}')">➕ 행 추가</button></div><div class="char-grid">`;
 
   for (const row of display) {
     const rowIdx = data.indexOf(row);
@@ -593,6 +924,28 @@ function renderCards(key, cfg, data, isGlobal) {
     }
     html += `<div><div class="char-name-kr">${hl(esc(kr))}</div><div class="char-name-jp">${hl(esc(jp))}</div></div></div>`;
     html += `<div class="char-meta">${gender ? `<span class="char-badge char-badge-gender">${esc(gender)}</span>` : ''}${ep ? `<span class="char-badge char-badge-ep">EP.${esc(String(ep))}</span>` : ''}</div></div>`;
+
+    for (const [lbl, val] of [['나이', age], ['1인칭', pro], ['호칭', called], ['말투/어미', speech], ['설정 및 특징', desc], ['호칭(타인에게)', callOth]]) {
+      if (val?.trim()) {
+        html += `<div class="char-field"><div class="char-field-label">${lbl}</div><div class="char-field-value" onclick="copyText(this)">${hl(esc(val))}</div></div>`;
+      }
+    }
+    html += '</div>';
+  }
+  // User-added cards
+  for (const ur of displayUser) {
+    const d = ur.data;
+    const [kr, jp, gender, age, ep, pro, called, speech, desc, callOth] =
+      [d[2]||'', d[3]||'', d[5]||'', d[6]||'', d[1]||'', d[7]||'', d[8]||'', d[9]||'', d[10]||'', d[11]||''];
+    const imgData = getAddedRowImg(key, ur.id);
+
+    html += `<div class="char-card user-added"><div class="char-card-header"><div class="char-card-header-left">`;
+    if (imgData) {
+      html += `<img class="char-img" src="${imgData}" onclick="showImg(this.src)" loading="lazy" alt="${esc(kr)}">`;
+    }
+    html += `<div><div class="char-name-kr">${hl(esc(kr))} <span class="user-row-badge">NEW</span></div><div class="char-name-jp">${hl(esc(jp))}</div></div></div>`;
+    html += `<div class="char-meta"><button class="user-row-delete" onclick="deleteAddedRow('${key}','${ur.id}')" title="삭제">🗑</button>`;
+    html += `${gender ? `<span class="char-badge char-badge-gender">${esc(gender)}</span>` : ''}${ep ? `<span class="char-badge char-badge-ep">EP.${esc(String(ep))}</span>` : ''}</div></div>`;
 
     for (const [lbl, val] of [['나이', age], ['1인칭', pro], ['호칭', called], ['말투/어미', speech], ['설정 및 특징', desc], ['호칭(타인에게)', callOth]]) {
       if (val?.trim()) {
